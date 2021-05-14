@@ -1,11 +1,14 @@
 package com.led_on_off.led.ui.main;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v7.app.AppCompatActivity;
+
 import com.led_on_off.led.R;
 
 /**
@@ -13,23 +16,27 @@ import com.led_on_off.led.R;
  * one of the sections/tabs/pages.
  */
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
     @StringRes
-    private static final int[] TAB_TITLES = new int[] {R.string.tab_text_1, R.string.tab_text_2,R.string.tab_text_3};
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2,R.string.tab_text_3};
     private final Context mContext;
-
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
     }
-
     @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+        Fragment fragment=null;
+        switch (position)
+        {
+            case 0:
+                return new Fragment1(mContext);
+            case 1:
+                return  new Fragment2();
+            case 2:
+                return new Fragment3();
+        }
+        return null;
     }
-
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
@@ -38,6 +45,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
+
         // Show 2 total pages.
         return 3;
     }

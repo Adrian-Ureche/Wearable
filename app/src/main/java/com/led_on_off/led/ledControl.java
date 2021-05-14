@@ -5,14 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Toast;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -20,9 +16,6 @@ import android.bluetooth.BluetoothDevice;
 import android.os.AsyncTask;
 
 import java.io.IOException;
-import java.util.UUID;
-
-import static java.sql.DriverManager.println;
 
 
 public class ledControl extends AppCompatActivity {
@@ -44,21 +37,13 @@ public class ledControl extends AppCompatActivity {
         Intent newint = getIntent();
         address = newint.getStringExtra(DeviceList.EXTRA_ADDRESS); //receive the address of the bluetooth device
 
-        //view of the ledControl
-        setContentView(R.layout.activity_led_control);
-        //call the widgets
 
 
         new ConnectBT().execute(); //Call the class to connect
 
         //commands to be sent to bluetooth
 
-
-
-
     }
-
-
     // fast way to call Toast
     private void msg(String s)
     {
@@ -122,17 +107,18 @@ public class ledControl extends AppCompatActivity {
         protected void onPostExecute(Void result) //after the doInBackground, it checks if everything went fine
         {
             super.onPostExecute(result);
-            if (!ConnectSuccess)
+            if (ConnectSuccess)
             {
                 msg("Connection Failed. Is it a SPP Bluetooth? Try again.");
                 finish();
             }
             else
             {
+                Log.d("pula test","meregeeeee\n");
                 msg("Connected.");
                 isBtConnected = true;
-                Intent intent = new Intent(ledControl.this, MainActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(ledControl.this, MainActivity.class);
+//                startActivity(intent);
             }
             progress.dismiss();
         }
