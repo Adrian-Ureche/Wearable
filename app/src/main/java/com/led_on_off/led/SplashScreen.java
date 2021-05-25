@@ -21,8 +21,15 @@ public class SplashScreen extends Activity {
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
+
                     Intent intent = new Intent(SplashScreen.this, LogInActivity.class);
                     startActivity(intent);
+//                    Accelerometer mysensor=new Accelerometer(getApplicationContext());
+//                    new Thread(mysensor).start();
+//                    BackgroudThread mainThread=new BackgroudThread(mysensor,getApplicationContext());
+//                    mainThread.execute();
+//                    Intent intent = new Intent(SplashScreen.this, MainActivity.class);
+//                    startActivity(intent);
                 }
             }
         };

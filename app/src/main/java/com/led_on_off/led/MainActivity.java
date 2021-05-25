@@ -11,6 +11,8 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,8 +65,47 @@ public class MainActivity extends AppCompatActivity  {
                         readRecommendationsThread.start();
                     }
                     TextView t = (TextView) findViewById(R.id.ViewTextRecomandari);
-                    t.setText(readRecommendations.recommendation);
+                    t.setText("");
+                    String a=readRecommendations.recommendation.substring(1,readRecommendations.recommendation.length()-1);
+                    String[] sp=a.split(";");
+                    for(int j=0;j<sp.length;j++)
+                    t.append(sp[j]+"\n");
                 }
+                else
+                    if(i==0)
+                {
+                    if(readRecommendationsThread.isAlive()!=true) {
+                        readRecommendationsThread = new Thread(readRecommendations);
+                        readRecommendationsThread.start();
+                    }
+                    TextView t = (TextView) findViewById(R.id.viewTextActivity);
+                    t.setText("");
+                    String a=readRecommendations.activity.substring(1,readRecommendations.activity.length()-1);
+                    String[] sp=a.split(";");
+                    for(int j=0;j<sp.length;j++)
+                        t.append(sp[j]+"\n");
+                }
+                    else
+                        if(i==1)
+                        {
+                            TextView t=findViewById(R.id.editTextTextPersonName3);
+                            t.addTextChangedListener(new TextWatcher() {
+                                @Override
+                                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                                }
+
+                                @Override
+                                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                                }
+
+                                @Override
+                                public void afterTextChanged(Editable editable) {
+                                    updateMentiuni();
+                                }
+                            });
+                        }
             }
             @Override
             public void onPageScrollStateChanged(int i) {
@@ -72,15 +113,21 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
     }
+    private void updateMentiuni()
+    {
+        TextView t=findViewById(R.id.editTextTextPersonName3);
+        Mentiuni.mentiune=t.getText().toString();
+    }
 }
 class ReadRecommendations implements Runnable
 {
     public String recommendation="";
+    public String activity="";
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void run() {
         try {
-            URL url = new URL("https://backend-ip-mediating-hedgehog-gl.cfapps.eu10.hana.ondemand.com/datemed/1234567891234");
+            URL url = new URL("https://backend-ip-mediating-hedgehog-gl.cfapps.eu10.hana.ondemand.com/datemed/"+CNP.getCnp());
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             if(connection.getResponseCode() == HttpsURLConnection.HTTP_OK){
                 // Do normal input or output stream reading
@@ -95,6 +142,7 @@ class ReadRecommendations implements Runnable
                     String[] splited=line.split(",");
                     System.out.println(splited[4].split(":")[1]);
                     recommendation=splited[4].split(":")[1];
+                    activity=splited[5].split(":")[1];
                 }
                 catch (IOException ioException) {
                     ioException.printStackTrace();
@@ -114,4 +162,8 @@ class ReadRecommendations implements Runnable
             e.printStackTrace();
         }
     }
+}
+class Mentiuni
+{
+    public static String mentiune="";
 }
